@@ -2,8 +2,8 @@
  *  rocr.h
  *  Reverse_OCR
  *
- *  Created by sbeyou on 1 août 2011.
- *  Copyright 2011 INRIA. All rights reserved.
+ *  Created by Sébastien Beyou on 1 August 2011.
+ *  Copyleft 2011. No rights reserved. WTFPL.
  *
  */
 
