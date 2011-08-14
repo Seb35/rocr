@@ -2,7 +2,7 @@
  *  spaces.cpp
  *  Reverse_OCR
  *
- *  Created by Sébastien Beyou on 30 July 2011.
+ *  Created by Seb35 on 30 July 2011.
  *  Copyleft 2011. No rights reserved. WTFPL.
  *
  */
