@@ -12,6 +12,7 @@
 
 #include "utils.h"
 #include "smctc.hh"
+#include <CImg.h>
 #include <string>
 #include <deque>
 #include <list>
@@ -20,6 +21,8 @@ namespace rocr {
 	
 	struct line;
 	struct text;
+	struct stats_word;
+	struct Language_heuristics;
 	
 	// Should I define CAESURA_ILLPOSED? this is related to the semantic of the word (given the language), not related to the "writing" it appears
 	typedef enum { CAESURA_UNDEF, CAESURA_NO, CAESURA_ONE, CAESURA_HALF, CAESURA_TWO } caesura_t;
@@ -43,6 +46,7 @@ namespace rocr {
 		
 		// Semi-assimilable parameters
 		bool3 WN;
+		stats_word* stats;
 		
 		// Linked parameters, do not touch externally
 		std::string WE;
@@ -72,15 +76,19 @@ namespace rocr {
 		void set_WC( bool wc, std::string we = "" ) { set_WC( bool2bool3( wc ), we ); }
 		void set_WC( bool3 wc, std::string we = "" ) {
 			
-			WE = wc == TRUE && WC != CAESURA_ONE && WC != CAESURA_HALF ? we.length() > 0 ? we : WK : ( WC == CAESURA_ONE || WC == CAESURA_HALF ? WE : "" );
-			WC = wc != UNDEF ? wc == TRUE ? WC == CAESURA_UNDEF || WC == CAESURA_NO || WC == CAESURA_TWO ? CAESURA_ONE : CAESURA_HALF : WC == CAESURA_ONE || WC == CAESURA_HALF ? CAESURA_TWO : CAESURA_NO : CAESURA_UNDEF;
+			WE = wc == B3TRUE && WC != CAESURA_ONE && WC != CAESURA_HALF ? we.length() > 0 ? we : WK : ( WC == CAESURA_ONE || WC == CAESURA_HALF ? WE : "" );
+			WC = wc != B3UNDEF ? wc == B3TRUE ? WC == CAESURA_UNDEF || WC == CAESURA_NO || WC == CAESURA_TWO ? CAESURA_ONE : CAESURA_HALF : WC == CAESURA_ONE || WC == CAESURA_HALF ? CAESURA_TWO : CAESURA_NO : CAESURA_UNDEF;
 		}
 		void set_WD( unsigned int wd ) { WD.push_back( wd ); }
 		void set_WN( bool3 wn ) { WN = wn; }
 		void set_WN( bool wn ) { WN = bool2bool3(wn); }
 		void set_WY( double wy ) { WY = wy; }
 		void set_WX( double wx ) { WX = wx; }
+		
 		void set_WE( const std::string& we = "" ) { WE = WC == CAESURA_UNDEF || WC == CAESURA_NO ? "" : we; }
+		void set_WW( unsigned int ww ) { WW = ww; }
+		void set_WH( unsigned int wh ) { WH = wh; }
+		void set_WL( unsigned int wl ) { WL = wl; }
 		
 		
 		/////////////
@@ -93,11 +101,27 @@ namespace rocr {
 	
 	typedef smc::particle<word> particle;
 	
-	struct std_word {
+	struct stats_word {
 		
-		//////////
-		// Data //
-		//////////
+		///////////
+		// Means //
+		///////////
+		
+		// Assimilable parameters, ordered from the more stable to the more volatile
+		double MWF;
+		double MWS;
+		double MWB;
+		double MWI;
+		double MWK;
+		double MWC;
+		double MWD;
+		double MWY;
+		double MWX;
+		
+		// Linked parameters, do not touch externally
+		double MWH;
+		double MWW;
+		double MWL;
 		
 		// Assimilable parameters, ordered from the more stable to the more volatile
 		double SWF;
@@ -113,7 +137,7 @@ namespace rocr {
 		// Linked parameters, do not touch externally
 		double SWH;
 		double SWW;
-		unsigned int SWL;
+		double SWL;
 	};
 	
 	struct line {

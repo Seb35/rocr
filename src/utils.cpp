@@ -12,15 +12,15 @@
 
 bool bool32bool( bool3 b ) {
 	
-	if( b == FALSE ) return false;
-	if( b == TRUE ) return true;
+	if( b == B3FALSE ) return false;
+	if( b == B3TRUE ) return true;
 	throw std::exception();
 	return false;
 }
 
 bool3 bool2bool3( bool b ) {
 	
-	if( b == false ) return FALSE;
-	if( b == true ) return TRUE;
-	return UNDEF;
+	if( b == false ) return B3FALSE;
+	if( b == true ) return B3TRUE;
+	return B3UNDEF;
 }

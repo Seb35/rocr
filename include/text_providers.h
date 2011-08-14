@@ -11,6 +11,9 @@
 #define __DYNAMICS_H__
 
 #include "rocr.h"
+#include "utils.h"
+#include <unicode/ustdio.h>
+#include <unicode/uchar.h>
 
 namespace rocr {
 	
@@ -36,8 +39,12 @@ namespace rocr {
 	
 	struct input_parameters_ALTO : protected input_parameters_text {
 		
-		input_parameters_ALTO() : type("ALTO"), avalaible_word(TRUE), avalaible_coordinates(true), avalaible_caesurae(true), text() {};
+		input_parameters_ALTO() { type = "ALTO"; available_word = B3TRUE; available_coordinates = B3TRUE; available_caesurae = B3TRUE; }
 		
+		void readPage() {
+			
+			
+		}
 	};
 	
 	//////////////
@@ -46,7 +53,16 @@ namespace rocr {
 	
 	struct input_parameters_wikitext : protected input_parameters_text {
 		
-		input_parameters_wikitext() : type("wikitext"), avalaible_word(TRUE), avalaible_coordinates(true), avalaible_caesurae(true), text() {};
+		std::string filename;
+		
+		input_parameters_wikitext() { type = "wikitext"; available_word = B3TRUE; available_coordinates = B3TRUE; available_caesurae = B3TRUE; }
+		
+		void readPage() {
+			
+			UFILE* f = u_fopen( filename.c_str(), "r", NULL, "UTF-8" );
+			
+			
+		}
 	};
 	
 	//////////
@@ -55,7 +71,11 @@ namespace rocr {
 	
 	struct input_parameters_DjVu : protected input_parameters_text {
 		
-		input_parameters_DjVu() : type("DjVu"), avalaible_word(TRUE), avalaible_coordinates(true), avalaible_caesurae(true), text() {};
+		input_parameters_DjVu() { type = "DjVu"; available_word = B3TRUE; available_coordinates = B3TRUE; available_caesurae = B3TRUE; }
+		
+		void readPage() {
+			
+		}
 	};
 	
 }

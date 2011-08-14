@@ -10,7 +10,7 @@
 #ifndef __UTILS_H__
 #define __UTILS_H__
 
-typedef enum { FALSE=0, TRUE=1, UNDEF=-1 } bool3;
+typedef enum { B3UNDEF=-1, B3FALSE=0, B3TRUE=1 } bool3;
 
 bool bool32bool( bool3 b );
 

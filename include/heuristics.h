@@ -21,7 +21,7 @@ namespace rocr {
 		std::string iso639;
 		std::list<std::string> iso15924;
 		
-		Language_heuristics();
+		Language_heuristics( std::string iso639 );
 		
 		void initialize( std::string iso639 );
 		
