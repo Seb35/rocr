@@ -24,31 +24,45 @@ namespace rocr {
 	// Observation parameters
 	struct input_parameters_image {
 		
-		std::string filename;
-		unsigned int PW;
-		unsigned int PH;
+		// @public
+		std::string filename; // filename of the image
+		unsigned int PV; // width-resolution
+		unsigned int PG; // height-resolution
+		
+		// @read-only
+		unsigned int PW; // width of the image
+		unsigned int PH; // height of the image
 	};
 	
+	//
 	// Specific textblock
+	//
+	// The Reverse_OCR only takes as input a specific textblock (for instance a paragraph or an isolated line)
+	// These parameters specify this textblock
+	// (A page should/must be analyzed previously by a segmentation algorithm to isolate textblocks, since this is
+	//  not a core part of the Reverse_OCR.)
 	struct input_parameters_textblock {
 		
-		unsigned int TR;
-		unsigned int TW;
-		unsigned int TH;
-		std::string TF;
-		unsigned int TS;
-		bool3 TB;
-		bool3 TI;
-		caesura_t TC;
-		unsigned int TD;
-		unsigned int TY;
-		unsigned int TX;
+		// objective parameters
+		unsigned int TR; // 
+		unsigned int TW; // width of the textblock
+		unsigned int TH; // height of the textblock
+		unsigned int TY; // vertical position of the textblock
+		unsigned int TX; // horizontal position of the textblock
 		
-		double STW;
-		double STH;
-		double STF;
-		double STY;
-		double STX;
+		// heuristics
+		std::string TF;  // presumed font of the textblock
+		unsigned int TS; // presumed font size of the textblock
+		bool3 TB;        // presumed boldness of the first word
+		bool3 TI;        // presumed italicsness of the first word
+		caesura_t TC;    // presumed caesuraness of the first word
+		unsigned int TD; // presumed caesura index of the first word (if caesura)
+		
+		double STW; // standard deviation of the width
+		double STH; // standard deviation of the height
+		double STF; // 
+		double STY; // standard deviation of the vertical position
+		double STX; // standard deviation of the horizontal position
 		
 		Language_heuristics* lang;
 	};
@@ -56,16 +70,16 @@ namespace rocr {
 	// Ocerized text of the specific textblock
 	struct input_parameters_text {
 		
-		typedef text* iterator;
-		typedef const text* const_iterator;
+		typedef std::list<text*>::iterator iterator;
+		typedef std::list<text*>::const_iterator const_iterator;
 		
 		std::string type;
 		bool3 available_word;
 		bool3 available_coordinates;
 		bool3 available_caesurae;
-		text texte;
+		//text texte;
 		
-		text* textblocks;
+		std::list<text*> textblocks;
 		unsigned int ntextblocks;
 		
 		virtual void readPage() = 0;
@@ -76,14 +90,17 @@ namespace rocr {
 		iterator end();
 		const_iterator end() const;
 		
-		text& front();
-		const text& front() const;
+		text* front();
+		const text* front() const;
 		
-		text& back();
-		const text& back() const;
+		text* back();
+		const text* back() const;
 	};
 	
-	// PF parameters
+	//
+	// Particle Filter parameters
+	//
+	// Specific assimilation parameters
 	struct input_parameters_PF {
 		
 		long N;                      ///< Number of particles
@@ -154,6 +171,9 @@ namespace rocr {
 		
 		void run();
 	};
+	
+	extern ROCR myROCR;
+	
 	
 	particle gpfInitialise( smc::rng* pRng );
 	

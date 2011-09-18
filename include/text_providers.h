@@ -37,45 +37,44 @@ namespace rocr {
 	// ALTO //
 	//////////
 	
-	struct input_parameters_ALTO : protected input_parameters_text {
+	typedef std::pair<unsigned int,unsigned int> order_alto;
+    
+	struct input_parameters_ALTO : public input_parameters_text {
 		
-		input_parameters_ALTO() { type = "ALTO"; available_word = B3TRUE; available_coordinates = B3TRUE; available_caesurae = B3TRUE; }
+		std::string filename;
+		double cv, ch, cw, cx, cy;
 		
-		void readPage() {
-			
-			
-		}
+		input_parameters_ALTO();
+		
+		void readPage();
 	};
 	
 	//////////////
 	// Wikitext //
 	//////////////
 	
+	typedef std::pair<unsigned int,unsigned int> order_wikitext;
+	
 	struct input_parameters_wikitext : protected input_parameters_text {
 		
 		std::string filename;
 		
-		input_parameters_wikitext() { type = "wikitext"; available_word = B3TRUE; available_coordinates = B3TRUE; available_caesurae = B3TRUE; }
+		input_parameters_wikitext();
 		
-		void readPage() {
-			
-			UFILE* f = u_fopen( filename.c_str(), "r", NULL, "UTF-8" );
-			
-			
-		}
+		void readPage();
 	};
 	
 	//////////
 	// DjVu //
 	//////////
 	
+	typedef std::pair<unsigned int,unsigned int> order_djvu;
+	
 	struct input_parameters_DjVu : protected input_parameters_text {
 		
-		input_parameters_DjVu() { type = "DjVu"; available_word = B3TRUE; available_coordinates = B3TRUE; available_caesurae = B3TRUE; }
+		input_parameters_DjVu();
 		
-		void readPage() {
-			
-		}
+		void readPage();
 	};
 	
 }

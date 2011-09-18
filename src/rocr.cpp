@@ -16,42 +16,42 @@ namespace rocr {
 
 input_parameters_text::iterator input_parameters_text::begin() {
 	
-	return textblocks;
+	return textblocks.begin();
 }
 
 input_parameters_text::const_iterator input_parameters_text::begin() const {
 	
-	return textblocks;
+	return textblocks.begin();
 }
 
 input_parameters_text::iterator input_parameters_text::end() {
 	
-	return &textblocks[ntextblocks-1];
+	return textblocks.end();
 }
 
 input_parameters_text::const_iterator input_parameters_text::end() const {
 	
-	return &textblocks[ntextblocks-1];
+	return textblocks.end();
 }
 
-text& input_parameters_text::front() {
+text* input_parameters_text::front() {
 	
-	return textblocks[0];
+	return textblocks.front();
 }
 
-const text& input_parameters_text::front() const {
+const text* input_parameters_text::front() const {
 	
-	return textblocks[0];
+	return textblocks.front();
 }
 
-text& input_parameters_text::back() {
+text* input_parameters_text::back() {
 	
-	return textblocks[ntextblocks-1];
+	return textblocks.back();
 }
 
-const text& input_parameters_text::back() const {
+const text* input_parameters_text::back() const {
 	
-	return textblocks[ntextblocks-1];
+	return textblocks.back();
 }
 
 ROCR myROCR;
@@ -59,13 +59,17 @@ ROCR myROCR;
 ROCR::ROCR() : params(), sampler(), moveset(), lang(0) {
 	
 	space.WK = " ";
-	imcreator.set_resolution( 300, 300 );
 }
 
 void ROCR::initialize_page( input_parameters_image* params_image ) {
 	
 	this->params.params_image = params_image;
+	
 	image_page.load( this->params.params_image->filename.c_str() );
+	imcreator.set_resolution( params_image->PV, params_image->PG );
+	
+	params_image->PH = image_page.height();
+	params_image->PW = image_page.width();
 }
 
 void ROCR::initialize_textblock( input_parameters_textblock* params_textblock, input_parameters_text* params_text ) {
@@ -89,7 +93,7 @@ particle ROCR::pfInitialise( smc::rng* pRng ) {
 	value->set_WS( this->params.params_textblock->TS );
 	value->set_WB( this->params.params_textblock->TB );
 	value->set_WI( this->params.params_textblock->TI );
-	value->set_WE( "" );
+	//value->set_WE( "" );
 	value->set_WK( "" );
 	value->set_WC( this->params.params_textblock->TC );
 	value->set_WD( this->params.params_textblock->TD );
@@ -254,8 +258,8 @@ void ROCR::pfMoveNewLine( long lTime, particle& particle, smc::rng* pRng ) {
 	word* value = particle.GetValuePointer();
 	
 	// Caesura
-	if( value->WC == CAESURA_ONE || value->WC == CAESURA_HALF || value->WC == CAESURA_TWO ) value->set_WE( value->WE );
-	else value->set_WE( "" );
+	//if( value->WC == CAESURA_ONE || value->WC == CAESURA_HALF || value->WC == CAESURA_TWO ) value->set_WE( value->WE );
+	//else value->set_WE( "" );
 	value->set_WN( true );
 	value->set_WC( true );
 	
